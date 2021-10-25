@@ -114,7 +114,7 @@ class _InputPageState extends State<InputPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Haftada kaç kere spor yapıyorsunuz?",
+                    "Haftada kaç kere gün yapıyorsunuz?",
                     style: TextStyle(
                         color: Colors.black54,
                         fontSize: 20,
