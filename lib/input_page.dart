@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:life_time/result_page.dart';
+import 'package:life_time/user_data.dart';
 
 import 'IconGender.dart';
 import 'MyContainer.dart';
@@ -13,7 +16,8 @@ class _InputPageState extends State<InputPage> {
   String? chosenGender;
   double smoken = 0.0;
   double spor = 0.0;
-  int weight = 170;
+  int height = 170;
+  int weight = 55;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,87 +32,23 @@ class _InputPageState extends State<InputPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: MyContainer(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: Text(
-                            'Boy',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: Text(
-                            '$weight',
-                            style: TextStyle(
-                                color: Colors.lightBlue,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            ButtonTheme(
-                              minWidth: 36,
-                              child: OutlineButton(
-                                  borderSide:
-                                  BorderSide(color:Colors.lightBlue),
-                                  child: Icon(
-                                    FontAwesomeIcons.plus,
-                                    size: 10,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      weight++;
-                                    });
-                                    print('üstteki buton');
-                                  }),
-                            ),
-                            ButtonTheme(
-                              minWidth: 36,
-                              child: OutlineButton(
-                                borderSide:
-                                  BorderSide(color:Colors.lightBlue),
-                                  child: Icon(
-                                    FontAwesomeIcons.minus,
-                                    size: 10,
-                                  ),
-                                  onPressed: () {
-                                  setState(() {
-                                    weight--;
-                                  });
-                                    print('alttaki buton');
-                                  }),
-                            ),
-                          ],
-                        ),
-                      ],
+            child: SingleChildScrollView(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: MyContainer(
+                      child: buildRowOutlineButton('BOY'),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: MyContainer(),
-                ),
-              ],
+                  Expanded(
+                    child: MyContainer(
+                      child: buildRowOutlineButton('KİLO'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          
           Expanded(
             child: MyContainer(
               child: Column(
@@ -118,14 +58,14 @@ class _InputPageState extends State<InputPage> {
                     "Haftada kaç gün yapıyorsunuz?",
                     style: TextStyle(
                         color: Colors.black54,
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '${spor.round()}',
                     style: TextStyle(
                         color: Colors.lightBlue,
-                        fontSize: 25,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   Slider(
@@ -151,14 +91,14 @@ class _InputPageState extends State<InputPage> {
                     "Günde kaç sigara içiyorsunuz?",
                     style: TextStyle(
                         color: Colors.black54,
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '${smoken.round()}',
                     style: TextStyle(
                         color: Colors.lightBlue,
-                        fontSize: 25,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   Slider(
@@ -209,8 +149,102 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
+          ButtonTheme(
+            height: 50,
+            child: FlatButton(
+              color: Colors.white,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                      UserData(weight: weight,height: height,chosenGender: chosenGender.toString(),spor: spor,smoken: smoken)
+                    ),
+                  ),
+                );
+              },
+              child: Text('HESAPLA'),
+            ),
+          )
         ],
       ),
+    );
+  }
+
+  Row buildRowOutlineButton(String label) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        RotatedBox(
+          quarterTurns: 3,
+          child: Text(
+            label,
+            style: TextStyle(
+                color: Colors.black54,
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        RotatedBox(
+          quarterTurns: 3,
+          child: Text(
+            label == 'BOY' ? height.toString() : weight.toString(),
+            style: TextStyle(
+                color: Colors.lightBlue,
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ButtonTheme(
+              minWidth: 36,
+              child: OutlineButton(
+                  borderSide: BorderSide(color: Colors.lightBlue),
+                  child: Icon(
+                    FontAwesomeIcons.plus,
+                    size: 10,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (label == 'BOY') {
+                        height++;
+                      } else {
+                        weight++;
+                      }
+                    });
+                    print('üstteki buton');
+                  }),
+            ),
+            ButtonTheme(
+              minWidth: 36,
+              child: OutlineButton(
+                  borderSide: BorderSide(color: Colors.lightBlue),
+                  child: Icon(
+                    FontAwesomeIcons.minus,
+                    size: 10,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (label == 'BOY') {
+                        height--;
+                      } else {
+                        weight--;
+                      }
+                    });
+                    print('alttaki buton');
+                  }),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
